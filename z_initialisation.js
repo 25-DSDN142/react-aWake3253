@@ -155,6 +155,13 @@ function gotHands(results) {
       firstDetection = true;
       console.log("First hand detected!");
     }
+
+    for (let hand of hands){
+      let gestures = detectFingerGestures(hand);
+      if(gestures.length >0){
+        console.log(hand.handedness + ": " + gestures.join(", "));
+      }
+    }
   }
 }
 
@@ -184,6 +191,24 @@ function initializeVideo() {
 
 // detectHandGesture(hand) returns "Pinch", "Peace", "Thumbs Up", "Pointing", "Open Palm", or "Fist"
 // detectFaceExpression(face) returns "Surprised", "Neutral", or "Smiling"
+
+function whatFinger(finger, hand){
+  let tip = hand[`${finger}_tip`];
+  let pip = hand[`${finger}_pip`];
+  return tip.y < pip.y - 20;
+}
+
+function fingerMap(hand){
+  let actions = [];
+  if(whatFinger('thumb', hand)) actions.push('Thumb');
+  if(whatFinger('index', hand)) actions.push('Index');
+  if(whatFinger('middle', hand)) actions.push('Middle');
+  if(whatFinger('ring', hand)) actions.push('Ring');
+  if(whatFinger('pinky', hand)) actions.push('Pinky');
+
+  return actions;
+
+}
 
 // Add gesture detection function
 function detectHandGesture(hand) {

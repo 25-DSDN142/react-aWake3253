@@ -7,10 +7,12 @@ let lastGesture = "";
 
 // function mousePressed(){
   function prepareInteraction() {
-  song = loadSound('song.mp3')
+  drum = loadSound('sounds/drum.mp3')
+  bass = loadSound('sounds/bass.mp3')
 
   if(!songStart && song !== undefined){
-    song.play();
+    drum.play();
+    bass.play();
     //song.pause();
     songStart = true;
   }
@@ -35,11 +37,19 @@ function drawInteraction(faces, hands) {
 
     let whatGesture = detectHandGesture(hand);
 
-    if (whatGesture == "Peace" && lastGesture !== "Peace") {
-      if(!song.isPlaying()){
-        song.play();
+    if (whatGesture == "Thumb" && lastGesture !== "Thumb") {
+      if(!drum.isPlaying()){
+        drum.play();
        }else {
-        song.pause();
+        drum.pause();
+      }
+    }
+
+    if (whatGesture == "Pinky" && lastGesture !== "Pinky") {
+      if(!bass.isPlaying()){
+        bass.play();
+       }else {
+        bass.pause();
       }
     }
     
