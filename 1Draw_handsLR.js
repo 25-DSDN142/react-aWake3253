@@ -1,20 +1,30 @@
 // ----=  HANDS  =----
 // USING THE GESTURE DETECTORS (check their values in the debug menu)
 // detectHandGesture(hand) returns "Pinch", "Peace", "Thumbs Up", "Pointing", "Open Palm", or "Fist"
+let song;
+let songStart = false;
+let lastGesture = "";
 
-/* load images here */
-function prepareInteraction() {
-  //bgImage = loadImage('/images/background.png');
+// function mousePressed(){
+  function prepareInteraction() {
+  song = loadSound('song.mp3')
+
+  if(!songStart && song !== undefined){
+    song.play();
+    //song.pause();
+    songStart = true;
+  }
 }
 
 function drawInteraction(faces, hands) {
+
   // hands part
   // for loop to capture if there is more than one hand on the screen. This applies the same process to all hands.
   for (let i = 0; i < hands.length; i++) {
     let hand = hands[i];
     // console.log(hand);
     if (showKeypoints) {
-      drawConnections(hand)
+      drawConnections(hand);
     }
 
     let middleFingerMcpX = hand.middle_finger_mcp.x;
@@ -23,13 +33,19 @@ function drawInteraction(faces, hands) {
     Start drawing on the hands here
     */
 
-    let whatGesture = detectHandGesture(hand)
+    let whatGesture = detectHandGesture(hand);
 
-    if (whatGesture == "Peace") {
-      fill(255, 38, 219) // pink
+    if (whatGesture == "Peace" && lastGesture !== "Peace") {
+      if(!song.isPlaying()){
+        song.play();
+       }else {
+        song.pause();
+      }
     }
+    
     if (whatGesture == "Thumbs Up") {
       fill(255, 252, 48) // yellow
+      ellipse(middleFingerMcpX, middleFingerMcpY, 80);
     }
 
 
@@ -40,14 +56,16 @@ function drawInteraction(faces, hands) {
     if (hand.handedness === "Left") {
      ellipse(middleFingerMcpX, middleFingerMcpY, 100)
     }
+    lastGesture = whatGesture;
     /*
     Stop drawing on the hands here
     */
   }
+}
   // You can make addtional elements here, but keep the hand drawing inside the for loop. 
   //------------------------------------------------------
 
-}
+
 
 
 function drawConnections(hand) {
