@@ -93,5 +93,5 @@ function drawPoints(feature) {
     circle(element.x, element.y, 10);
   }
   pop()
-
+  
 }
