@@ -7,19 +7,21 @@ let lastGesture = "";
 
 // function mousePressed(){
   function prepareInteraction() {
-  drum = loadSound('sounds/drum.mp3')
+  drum = loadSound('sounds/drums.mp3')
   bass = loadSound('sounds/bass.mp3')
+  synth = loadSound('sounds/synth.mp3')
+  vocal = loadSound('sounds/vocal.mp3')
 
   if(!songStart && song !== undefined){
     drum.play();
     bass.play();
-    //song.pause();
+    synth.play();
+    vocal.play();
     songStart = true;
   }
 }
 
 function drawInteraction(faces, hands) {
-
   // hands part
   // for loop to capture if there is more than one hand on the screen. This applies the same process to all hands.
   for (let i = 0; i < hands.length; i++) {
@@ -37,7 +39,9 @@ function drawInteraction(faces, hands) {
 
     let whatGesture = detectHandGesture(hand);
 
-    if (whatGesture == "Thumb" && lastGesture !== "Thumb") {
+    let fingers = fingerMap(hand);
+
+    if (whatGesture == "Thumbs Up" && lastGesture !== "Thumbs Up") {
       if(!drum.isPlaying()){
         drum.play();
        }else {
@@ -52,14 +56,24 @@ function drawInteraction(faces, hands) {
         bass.pause();
       }
     }
-    
-    if (whatGesture == "Thumbs Up") {
-      fill(255, 252, 48) // yellow
-      ellipse(middleFingerMcpX, middleFingerMcpY, 80);
+
+    if (whatGesture == "Pointing" && lastGesture !== "Pointing") {
+      if(!synth.isPlaying()){
+        synth.play();
+       }else {
+        synth.pause();
+      }
     }
 
+    if (whatGesture == "Middle" && lastGesture !== "Middle") {
+      if(!vocal.isPlaying()){
+        vocal.play();
+       }else {
+        vocal.pause();
+      }
+    }
 
-    if (hand.handedness === "Right") {
+    /*if (hand.handedness === "Right") {
       rect(middleFingerMcpX, middleFingerMcpY, 100)
     }
 

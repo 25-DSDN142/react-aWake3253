@@ -148,6 +148,11 @@ function gotFaces(results) {
   }
 }
 
+function detectFingerGestures(hand){
+  if(!hand) return [];
+  return fingerMap(hand);
+}
+
 function gotHands(results) {
   if (typeof hands !== 'undefined') {
     hands = results;
@@ -195,6 +200,8 @@ function initializeVideo() {
 function whatFinger(finger, hand){
   let tip = hand[`${finger}_tip`];
   let pip = hand[`${finger}_pip`];
+
+  if(!tip || !pip) return false;
   return tip.y < pip.y - 20;
 }
 
@@ -245,6 +252,13 @@ function detectHandGesture(hand) {
     return "Thumbs Up";
   }
   
+  
+  let middle = hand.middle_finger_tip.y < hand.middle_finger_pip.y - 20;
+  if(middle){
+    return "Middle";
+  }
+
+
   // Pointing detection
   let indexExtended = hand.index_finger_tip.y < hand.index_finger_mcp.y - 20;
   let othersClosed = 
@@ -277,7 +291,18 @@ function detectHandGesture(hand) {
   if (allClosed) {
     return "Fist";
   }
+
+
+
+  let pinkyExtended = hand.pinky_finger_tip.y < hand.pinky_finger_mcp.y - 20;
+  let othersDown = 
+    hand.index_finger_tip.y > hand.index_finger_mcp.y &&
+    hand.middle_finger_tip.y > hand.middle_finger_mcp.y &&
+    hand.ring_finger_tip.y > hand.ring_finger_mcp.y;
   
+  if (pinkyExtended && othersDown) {
+    return "Pinky";
+  }
   return null;
 }
 
