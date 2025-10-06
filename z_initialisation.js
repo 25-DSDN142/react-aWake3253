@@ -259,7 +259,7 @@ function detectHandGesture(hand) {
   }
 
 
-  // Pointing detection
+  // Pointing detection (QUODO GENERATED bounds, but my structure)
   let indexExtended = hand.index_finger_tip.y < hand.index_finger_mcp.y - 20;
   let othersClosed = 
     hand.middle_finger_tip.y > hand.middle_finger_pip.y &&
@@ -293,7 +293,7 @@ function detectHandGesture(hand) {
   }
 
 
-
+//pinky detection (QUODO GENERATED bounds, but my structure)
   let pinkyExtended = hand.pinky_finger_tip.y < hand.pinky_finger_mcp.y - 20;
   let othersDown = 
     hand.index_finger_tip.y > hand.index_finger_mcp.y &&

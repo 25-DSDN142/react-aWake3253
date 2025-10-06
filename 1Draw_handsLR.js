@@ -2,9 +2,9 @@
 // USING THE GESTURE DETECTORS (check their values in the debug menu)
 // detectHandGesture(hand) returns "Pinch", "Peace", "Thumbs Up", "Pointing", "Open Palm", or "Fist"
 let song;
-let songStart = false;
+let songStart = true;
 let lastGesture = "";
-
+let vocal, drum,bass,synth;
 // function mousePressed(){
   function prepareInteraction() {
   drum = loadSound('sounds/drums.mp3')
@@ -12,16 +12,24 @@ let lastGesture = "";
   synth = loadSound('sounds/synth.mp3')
   vocal = loadSound('sounds/vocal.mp3')
 
-  if(!songStart && song !== undefined){
-    drum.play();
-    bass.play();
-    synth.play();
-    vocal.play();
-    songStart = true;
-  }
 }
 
 function drawInteraction(faces, hands) {
+  if(songStart){
+    drum.loop();
+    bass.loop();
+    synth.loop();
+    vocal.loop();
+
+    //sets all stems to muted
+    drum.setVolume(0);
+    bass.setVolume(0);
+    synth.setVolume(0);
+    vocal.setVolume(0);
+
+    songStart = false;
+  }
+ // vocal.setVolume(1)
   // hands part
   // for loop to capture if there is more than one hand on the screen. This applies the same process to all hands.
   for (let i = 0; i < hands.length; i++) {
@@ -39,39 +47,28 @@ function drawInteraction(faces, hands) {
 
     let whatGesture = detectHandGesture(hand);
 
+
     let fingers = fingerMap(hand);
 
-    if (whatGesture == "Thumbs Up" && lastGesture !== "Thumbs Up") {
-      if(!drum.isPlaying()){
-        drum.play();
-       }else {
-        drum.pause();
-      }
-    }
+     if (whatGesture == "Thumbs Up" && lastGesture !== "Thumbs Up") {
+       drum.setVolume(drum.getVolume() > 0 ? 0 : 1);
+     }
 
     if (whatGesture == "Pinky" && lastGesture !== "Pinky") {
-      if(!bass.isPlaying()){
-        bass.play();
-       }else {
-        bass.pause();
-      }
+      bass.setVolume(bass.getVolume() > 0 ? 0 : 1);
+
     }
 
     if (whatGesture == "Pointing" && lastGesture !== "Pointing") {
-      if(!synth.isPlaying()){
-        synth.play();
-       }else {
-        synth.pause();
-      }
+      synth.setVolume(synth.getVolume() > 0 ? 0 : 1);
+
     }
 
     if (whatGesture == "Middle" && lastGesture !== "Middle") {
-      if(!vocal.isPlaying()){
-        vocal.play();
-       }else {
-        vocal.pause();
-      }
+      vocal.setVolume(vocal.getVolume() > 0 ? 0 : 1);
+
     }
+    lastGesture = whatGesture;
 
     /*if (hand.handedness === "Right") {
       rect(middleFingerMcpX, middleFingerMcpY, 100)
