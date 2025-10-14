@@ -1,35 +1,79 @@
-// ----=  HANDS  =----
+let song;
+let songStart = true;
+let lastGesture = "";
+let bass, drum, synth, vocal;
+
+let drumOn = false;
+let bassOn = false;
+let synthOn = false;
+let vocalOn = false;
+
+
+
 function prepareInteraction() {
-  //bgImage = loadImage('/images/background.png');
+  drum = loadSound('sounds/drums.mp3')
+  bass = loadSound('sounds/bass.mp3')
+  synth = loadSound('sounds/synth.mp3')
+  vocal = loadSound('sounds/vocal.mp3')
+
+
+
 }
 
 function drawInteraction(faces, hands) {
 
-  // hands part
-  // USING THE GESTURE DETECTORS (check their values in the debug menu)
-  // detectHandGesture(hand) returns "Pinch", "Peace", "Thumbs Up", "Pointing", "Open Palm", or "Fist"
+  if(songStart){
+    drum.loop();
+    bass.loop();
+    synth.loop();
+    vocal.loop();
 
+    //sets all stems to muted
+    drum.setVolume(0);
+    bass.setVolume(0);
+    synth.setVolume(0);
+    vocal.setVolume(0);
+
+    songStart = false;
+  }
+ 
   // for loop to capture if there is more than one hand on the screen. This applies the same process to all hands.
   for (let i = 0; i < hands.length; i++) {
     let hand = hands[i];
     if (showKeypoints) {
-      drawPoints(hand)
-      drawConnections(hand)
+      drawConnections(hand);
     }
-    // console.log(hand);
-    let indexFingerTipX = hand.index_finger_tip.x;
-    let indexFingerTipY = hand.index_finger_tip.y;
-    /*
-    Start drawing on the hands here
-    */
 
-    // pinchCircle(hand)
-    fill(225, 225, 0);
-    ellipse(indexFingerTipX, indexFingerTipY, 30, 30);
+    let whatGesture = detectHandGesture(hand);
 
-    /*
-    Stop drawing on the hands here
-    */
+
+    let fingers = fingerMap(hand);
+
+     if (whatGesture == "Thumbs Up" && lastGesture !== "Thumbs Up") {
+       drum.setVolume(drum.getVolume() > 0 ? 0 : 1);
+       drumOn = !drumOn;
+     }
+
+    if (whatGesture == "Pinky" && lastGesture !== "Pinky") {
+      bass.setVolume(bass.getVolume() > 0 ? 0 : 1);
+      bassOn = !bassOn;
+
+
+    }
+
+    if (whatGesture == "Pointing" && lastGesture !== "Pointing") {
+      synth.setVolume(synth.getVolume() > 0 ? 0 : 1);
+      synthOn = !synthOn;
+
+
+    }
+
+    if (whatGesture == "Middle" && lastGesture !== "Middle") {
+      vocal.setVolume(vocal.getVolume() > 0 ? 0 : 1);
+      vocalOn = !vocalOn;
+    }
+    lastGesture = whatGesture;
+
   }
 
 
@@ -39,40 +83,39 @@ function drawInteraction(faces, hands) {
   // for loop to capture if there is more than one face on the screen. This applies the same process to all faces. 
   for (let i = 0; i < faces.length; i++) {
     let face = faces[i]; // face holds all the keypoints of the face
-    if (showKeypoints) {
-      drawPoints(face)
+    if (face.leftEyebrow && face.rightEyebrow) {
+      let foreheadX = (face.leftEyebrow.keypoints[2].x + face.rightEyebrow.keypoints[2].x)/2;
+      let foreheadY = (face.leftEyebrow.keypoints[2].y + face.rightEyebrow.keypoints[2].y)/2 -40;
+
+      let pulse = sin(frameCount *0.1) *5;
+      let spacing = 40;
+      push();
+      noStroke();
+
+      if (drumOn && drum.isPlaying()){
+        let drumAmp = drum.getLevel();
+        let size = 30 +drumAmp *300;
+        fill(255, 50, 50, 180);
+        circle(foreheadX - spacing *1.5, foreheadY, size);
+      }
+
+      if(bassOn){
+        fill(50, 255, 100, 180);
+        circle(foreheadX - spacing *0.5, foreheadY, 30+pulse);
+      }
+
+      if(synthOn){
+        fill(50, 150, 255, 180);
+        circle(foreheadX + spacing *0.5, foreheadY, 30+pulse);
+      }
+      if(vocalOn){
+        fill(200, 100, 255, 180);
+        circle(foreheadX + spacing *1.5, foreheadY, 30+pulse);
+      }
+
+      pop();
     }
-    // console.log(face);
-    /*
-    Once this program has a face, it knows some things about it.
-    This includes how to draw a box around the face, and an oval. 
-    It also knows where the key points of the following parts are:
-     face.leftEye
-     face.leftEyebrow
-     face.lips
-     face.rightEye
-     face.rightEyebrow
-    */
-
-    /*
-    Start drawing on the face here
-    */
-
-    // fill(225, 225, 0);
-    // ellipse(leftEyeCenterX, leftEyeCenterY, leftEyeWidth, leftEyeHeight);
-
-    drawPoints(face.leftEye);
-    drawPoints(face.leftEyebrow);
-    drawPoints(face.lips);
-    drawPoints(face.rightEye);
-    drawPoints(face.rightEyebrow);
-    /*
-    Stop drawing on the face here
-    */
-
   }
-  //------------------------------------------------------
-  // You can make addtional elements here, but keep the face drawing inside the for loop. 
 }
 
 
@@ -91,25 +134,6 @@ function drawConnections(hand) {
   pop()
 }
 
-function pinchCircle(hand) { // adapted from https://editor.p5js.org/ml5/sketches/DNbSiIYKB
-  // Find the index finger tip and thumb tip
-  let finger = hand.index_finger_tip;
-  //let finger = hand.pinky_finger_tip;
-  let thumb = hand.thumb_tip;
-
-  // Draw circles at finger positions
-  let centerX = (finger.x + thumb.x) / 2;
-  let centerY = (finger.y + thumb.y) / 2;
-  // Calculate the pinch "distance" between finger and thumb
-  let pinch = dist(finger.x, finger.y, thumb.x, thumb.y);
-
-  // This circle's size is controlled by a "pinch" gesture
-  fill(0, 255, 0, 200);
-  stroke(0);
-  strokeWeight(2);
-  circle(centerX, centerY, pinch);
-
-}
 
 
 // This function draw's a dot on all the keypoints. It can be passed a whole face, or part of one. 

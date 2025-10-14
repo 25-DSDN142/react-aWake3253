@@ -1,16 +1,23 @@
-// ----=  HANDS  =----
-// USING THE GESTURE DETECTORS (check their values in the debug menu)
-// detectHandGesture(hand) returns "Pinch", "Peace", "Thumbs Up", "Pointing", "Open Palm", or "Fist"
+
 let song;
 let songStart = true;
 let lastGesture = "";
-let vocal, drum,bass,synth;
-// function mousePressed(){
-  function prepareInteraction() {
+let bass, drums, synth, vocal;
+
+let drumOn = false;
+let bassOn = false;
+let synthOn = false;
+let vocalOn = false;
+
+
+
+function prepareInteraction() {
   drum = loadSound('sounds/drums.mp3')
   bass = loadSound('sounds/bass.mp3')
   synth = loadSound('sounds/synth.mp3')
   vocal = loadSound('sounds/vocal.mp3')
+
+
 
 }
 
@@ -29,21 +36,13 @@ function drawInteraction(faces, hands) {
 
     songStart = false;
   }
- // vocal.setVolume(1)
-  // hands part
+ 
   // for loop to capture if there is more than one hand on the screen. This applies the same process to all hands.
   for (let i = 0; i < hands.length; i++) {
     let hand = hands[i];
-    // console.log(hand);
     if (showKeypoints) {
       drawConnections(hand);
     }
-
-    let middleFingerMcpX = hand.middle_finger_mcp.x;
-    let middleFingerMcpY = hand.middle_finger_mcp.y;
-    /*
-    Start drawing on the hands here
-    */
 
     let whatGesture = detectHandGesture(hand);
 
@@ -52,42 +51,31 @@ function drawInteraction(faces, hands) {
 
      if (whatGesture == "Thumbs Up" && lastGesture !== "Thumbs Up") {
        drum.setVolume(drum.getVolume() > 0 ? 0 : 1);
+       drumOn = !drumOn;
      }
 
     if (whatGesture == "Pinky" && lastGesture !== "Pinky") {
       bass.setVolume(bass.getVolume() > 0 ? 0 : 1);
+      bassOn = !bassOn;
+
 
     }
 
     if (whatGesture == "Pointing" && lastGesture !== "Pointing") {
       synth.setVolume(synth.getVolume() > 0 ? 0 : 1);
+      synthOn = !synthOn;
+
 
     }
 
     if (whatGesture == "Middle" && lastGesture !== "Middle") {
       vocal.setVolume(vocal.getVolume() > 0 ? 0 : 1);
-
+      vocalOn = !vocalOn;
     }
     lastGesture = whatGesture;
 
-    /*if (hand.handedness === "Right") {
-      rect(middleFingerMcpX, middleFingerMcpY, 100)
-    }
-
-    if (hand.handedness === "Left") {
-     ellipse(middleFingerMcpX, middleFingerMcpY, 100)
-    }
-    lastGesture = whatGesture;
-    /*
-    Stop drawing on the hands here
-    */
   }
 }
-  // You can make addtional elements here, but keep the hand drawing inside the for loop. 
-  //------------------------------------------------------
-
-
-
 
 function drawConnections(hand) {
   // Draw the skeletal connections
