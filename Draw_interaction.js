@@ -36,7 +36,7 @@ function drawInteraction(faces, hands) {
     songStart = false;
   }
  
-  // for loop to capture if there is more than one hand on the screen. This applies the same process to all hands.
+  // hand loop
   for (let i = 0; i < hands.length; i++) {
     let hand = hands[i];
     if (showKeypoints) {
@@ -75,11 +75,7 @@ function drawInteraction(faces, hands) {
 
   }
 
-
-
-  //------------------------------------------------------------
-  //facePart
-  // for loop to capture if there is more than one face on the screen. This applies the same process to all faces. 
+ //face loop
   for (let i = 0; i < faces.length; i++) {
     let face = faces[i]; // face holds all the keypoints of the face
     if (face.leftEyebrow && face.rightEyebrow) {

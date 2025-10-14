@@ -223,7 +223,7 @@ function detectHandGesture(hand) {
   
 
   // Thumbs up detection
-  let thumbUp = hand.thumb_tip.y < hand.thumb_ip.y - 20;
+  let thumbUp = hand.thumb_tip.y < hand.thumb_ip.y - 19;
   let fingersDown = 
     hand.index_finger_tip.y > hand.index_finger_mcp.y &&
     hand.middle_finger_tip.y > hand.middle_finger_mcp.y &&
@@ -234,12 +234,11 @@ function detectHandGesture(hand) {
     return "Thumbs Up";
   }
   
-  
-  let middle = hand.middle_finger_tip.y < hand.middle_finger_pip.y - 20;
+  // middle finger detection
+  let middle = hand.middle_finger_tip.y < hand.middle_finger_pip.y - 24;
   if(middle){
     return "Middle";
   }
-
 
   // Pointing detection (QUODO GENERATED bounds, but my structure)
   let indexExtended = hand.index_finger_tip.y < hand.index_finger_mcp.y - 20;
@@ -251,8 +250,6 @@ function detectHandGesture(hand) {
   if (indexExtended && othersClosed) {
     return "Pointing";
   }
-  
-
   
 //pinky detection (QUODO GENERATED bounds, but my structure)
   let pinkyExtended = hand.pinky_finger_tip.y < hand.pinky_finger_mcp.y - 20;
