@@ -1,23 +1,22 @@
 let song;
+let cover;
 let songStart = true;
 let lastGesture = "";
 let bass, drum, synth, vocal;
 
+let drumAmp, bassAmp, synthAmp, vocalAmp
 let drumOn = false;
 let bassOn = false;
 let synthOn = false;
 let vocalOn = false;
 
 
-
 function prepareInteraction() {
-  drum = loadSound('sounds/drums.mp3')
-  bass = loadSound('sounds/bass.mp3')
-  synth = loadSound('sounds/synth.mp3')
-  vocal = loadSound('sounds/vocal.mp3')
-
-
-
+  drum = loadSound('sounds/drums.mp3');
+  bass = loadSound('sounds/bass.mp3');
+  synth = loadSound('sounds/synth.mp3');
+  vocal = loadSound('sounds/vocal.mp3');
+  cover = loadImage('images/cover.jpg');
 }
 
 function drawInteraction(faces, hands) {
@@ -92,11 +91,14 @@ function drawInteraction(faces, hands) {
       push();
       noStroke();
 
-      if (drumOn && drum.isPlaying()){
-        let drumAmp = drum.getLevel();
-        let size = 30 +drumAmp *300;
+      let coverWidth = 140;
+      let coverHeight = 140;
+      imageMode(CENTER);
+      image(cover, foreheadX, foreheadY - 90, coverWidth, coverHeight);
+
+      if (drumOn){
         fill(255, 50, 50, 180);
-        circle(foreheadX - spacing *1.5, foreheadY, size);
+        circle(foreheadX - spacing *1.5, foreheadY, 30+pulse);
       }
 
       if(bassOn){

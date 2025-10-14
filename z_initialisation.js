@@ -219,27 +219,9 @@ function fingerMap(hand){
 
 // Add gesture detection function
 function detectHandGesture(hand) {
-  if (!hand || hand.confidence < 0.7) return null;
+  if (!hand || hand.confidence < 0.6) return null;
   
-  // Pinch detection
-  let thumbTip = hand.thumb_tip;
-  let indexTip = hand.index_finger_tip;
-  let pinchDist = dist(thumbTip.x, thumbTip.y, indexTip.x, indexTip.y);
-  
-  if (pinchDist < 30) {
-    return "Pinch";
-  }
-  
-  // Peace sign detection
-  let indexUp = hand.index_finger_tip.y < hand.index_finger_pip.y - 20;
-  let middleUp = hand.middle_finger_tip.y < hand.middle_finger_pip.y - 20;
-  let ringDown = hand.ring_finger_tip.y > hand.ring_finger_pip.y;
-  let pinkyDown = hand.pinky_finger_tip.y > hand.pinky_finger_pip.y;
-  
-  if (indexUp && middleUp && ringDown && pinkyDown) {
-    return "Peace";
-  }
-  
+
   // Thumbs up detection
   let thumbUp = hand.thumb_tip.y < hand.thumb_ip.y - 20;
   let fingersDown = 
@@ -270,29 +252,8 @@ function detectHandGesture(hand) {
     return "Pointing";
   }
   
-  // Open palm
-  let allExtended = 
-    hand.index_finger_tip.y < hand.index_finger_mcp.y &&
-    hand.middle_finger_tip.y < hand.middle_finger_mcp.y &&
-    hand.ring_finger_tip.y < hand.ring_finger_mcp.y &&
-    hand.pinky_finger_tip.y < hand.pinky_finger_mcp.y;
-  
-  if (allExtended) {
-    return "Open Palm";
-  }
-  
-  // Fist
-  let allClosed = 
-    hand.index_finger_tip.y > hand.index_finger_mcp.y &&
-    hand.middle_finger_tip.y > hand.middle_finger_mcp.y &&
-    hand.ring_finger_tip.y > hand.ring_finger_mcp.y &&
-    hand.pinky_finger_tip.y > hand.pinky_finger_mcp.y;
-  
-  if (allClosed) {
-    return "Fist";
-  }
 
-
+  
 //pinky detection (QUODO GENERATED bounds, but my structure)
   let pinkyExtended = hand.pinky_finger_tip.y < hand.pinky_finger_mcp.y - 20;
   let othersDown = 
