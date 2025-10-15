@@ -223,7 +223,7 @@ function detectHandGesture(hand) {
   
 
   // Thumbs up detection
-  let thumbUp = hand.thumb_tip.y < hand.thumb_ip.y - 19;
+  let thumbUp = hand.thumb_tip.y < hand.thumb_ip.y - 20;
   let fingersDown = 
     hand.index_finger_tip.y > hand.index_finger_mcp.y &&
     hand.middle_finger_tip.y > hand.middle_finger_mcp.y &&
@@ -235,7 +235,7 @@ function detectHandGesture(hand) {
   }
   
   // middle finger detection
-  let middle = hand.middle_finger_tip.y < hand.middle_finger_pip.y - 24;
+  let middle = hand.middle_finger_tip.y < hand.middle_finger_pip.y - 20;
   if(middle){
     return "Middle";
   }
