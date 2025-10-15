@@ -22,8 +22,8 @@ function prepareInteraction() {
 
 //draws interaction on each tick
 function drawInteraction(faces, hands) {
- //ensures all songs loop
-  if(songStart){
+  //ensures all songs loop
+  if (songStart) {
     drum.loop();
     bass.loop();
     synth.loop();
@@ -37,7 +37,7 @@ function drawInteraction(faces, hands) {
 
     songStart = false;
   }
- 
+
   // hand loop
   for (let i = 0; i < hands.length; i++) {
     let hand = hands[i];
@@ -48,23 +48,19 @@ function drawInteraction(faces, hands) {
     let whatGesture = detectHandGesture(hand);
 
     //maps each stem to a gesture, and enables visuals and volume control
-     if (whatGesture == "Thumbs Up" && lastGesture !== "Thumbs Up") {
-       drum.setVolume(drum.getVolume() > 0 ? 0 : 1);
-       drumOn = !drumOn;
-     }
+    if (whatGesture == "Thumbs Up" && lastGesture !== "Thumbs Up") {
+      drum.setVolume(drum.getVolume() > 0 ? 0 : 1);
+      drumOn = !drumOn;
+    }
 
     if (whatGesture == "Pinky" && lastGesture !== "Pinky") {
       bass.setVolume(bass.getVolume() > 0 ? 0 : 1);
       bassOn = !bassOn;
-
-
     }
 
     if (whatGesture == "Pointing" && lastGesture !== "Pointing") {
       synth.setVolume(synth.getVolume() > 0 ? 0 : 1);
       synthOn = !synthOn;
-
-
     }
 
     if (whatGesture == "Middle" && lastGesture !== "Middle") {
@@ -75,15 +71,15 @@ function drawInteraction(faces, hands) {
 
   }
 
- //face loop
+  //face loop
   for (let i = 0; i < faces.length; i++) {
     let face = faces[i]; // face holds all the keypoints of the face
     if (face.leftEyebrow && face.rightEyebrow) { //sets up forehead dimensions
-      let foreheadX = (face.leftEyebrow.keypoints[2].x + face.rightEyebrow.keypoints[2].x)/2;
-      let foreheadY = (face.leftEyebrow.keypoints[2].y + face.rightEyebrow.keypoints[2].y)/2 -40;
+      let foreheadX = (face.leftEyebrow.keypoints[2].x + face.rightEyebrow.keypoints[2].x) / 2;
+      let foreheadY = (face.leftEyebrow.keypoints[2].y + face.rightEyebrow.keypoints[2].y) / 2 - 40;
 
       //enables the visual effects
-      let pulse = sin(frameCount *0.1) *5;
+      let pulse = sin(frameCount * 0.1) * 5;
       let spacing = 40;
       push();
       noStroke();
@@ -94,38 +90,38 @@ function drawInteraction(faces, hands) {
       image(cover, foreheadX, foreheadY - 90, coverWidth, coverHeight);
 
       //draw text vertically function
-      function drawVerticalText (txt, x, y){
+      function drawVerticalText(txt, x, y) {
         push();
         translate(x, y);
         rotate(HALF_PI);
         text(txt, 18, 3);
         pop();
-      
+
       }
-      //triggers for each gesture
-      if (drumOn){
+      //triggers for each gesture, takes visual command from hands and enables face command
+      if (drumOn) {
         fill(255, 50, 50, 180);
-        circle(foreheadX - spacing *1.5, foreheadY, 30+pulse);
-        drawVerticalText("Drums", foreheadX - spacing*1.5, foreheadY+ 35)
+        circle(foreheadX - spacing * 1.5, foreheadY, 30 + pulse);
+        drawVerticalText("Drums", foreheadX - spacing * 1.5, foreheadY + 35)
       }
 
-      if(bassOn){
+      if (bassOn) {
         fill(50, 255, 100, 180);
-        circle(foreheadX - spacing *0.5, foreheadY, 30+pulse);
-        drawVerticalText("Bass", foreheadX - spacing*0.5, foreheadY +35)
+        circle(foreheadX - spacing * 0.5, foreheadY, 30 + pulse);
+        drawVerticalText("Bass", foreheadX - spacing * 0.5, foreheadY + 35)
 
       }
 
-      if(synthOn){
+      if (synthOn) {
         fill(50, 150, 255, 180);
-        circle(foreheadX + spacing *0.5, foreheadY, 30+pulse);
-        drawVerticalText("Synth", foreheadX + spacing*0.5, foreheadY +35)
+        circle(foreheadX + spacing * 0.5, foreheadY, 30 + pulse);
+        drawVerticalText("Synth", foreheadX + spacing * 0.5, foreheadY + 35)
 
       }
-      if(vocalOn){
+      if (vocalOn) {
         fill(200, 100, 255, 180);
-        circle(foreheadX + spacing *1.5, foreheadY, 30+pulse);
-        drawVerticalText("Vocals", foreheadX + spacing*1.5, foreheadY +35)
+        circle(foreheadX + spacing * 1.5, foreheadY, 30 + pulse);
+        drawVerticalText("Vocals", foreheadX + spacing * 1.5, foreheadY + 35)
 
       }
 
