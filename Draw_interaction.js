@@ -93,6 +93,7 @@ function drawInteraction(faces, hands) {
       imageMode(CENTER);
       image(cover, foreheadX, foreheadY - 90, coverWidth, coverHeight);
 
+      //draw text vertically function
       function drawVerticalText (txt, x, y){
         push();
         translate(x, y);
