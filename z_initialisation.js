@@ -66,6 +66,11 @@ function showLoadingAnimation() {
     text("Loading ML5 models...", width/2, height/2);
     textSize(14);
     text("Move your hand or face in front of camera", width/2, height/2 + 30);
+    textSize(28);
+    text("Use your thumb, pointer finger, midddle finger ", width/2, height/2 + 60);
+    text("and pinky gestures to control the stems of the song!", width/2, height/2 + 88);
+    text("Please load up using the 'Both' interface, or press 3 on your keyboard", width/2, height/2 + 114);
+
   }
   
   // Simple animated dots
